@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JustArist | Main Page</title>
+    <style>
+        :root {
+            --bg-color: #0b0f1a;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --accent-color: #6366f1;
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+            --container-width: 900px;
+        }
+
+        body {
+            margin: 0;
+            padding: 40px 20px;
+            background-color: var(--bg-color);
+            font-family: 'Inter', -apple-system, sans-serif;
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://grainy-gradients.vercel.app/noise.svg');
+            opacity: 0.04;
+            z-index: 100;
+            pointer-events: none;
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-color);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--glass-border);
+            border-radius: 5px;
+            border: 2px solid var(--bg-color);
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-color);
+        }
+
+        .blobs {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        .blob {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(99,102,241,0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(60px);
+            animation: float 20s infinite alternate;
+        }
+        .blob-1 { top: -100px; left: -100px; }
+        .blob-2 { bottom: -100px; right: -100px; background: radial-gradient(circle, rgba(168,85,247,0.15) 0%, transparent 70%); }
+
+        @keyframes float {
+            from { transform: translate(0, 0); }
+            to { transform: translate(100px, 50px); }
+        }
+
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .glass.featured-project, 
+        .glass.small-card {
+            text-decoration: none;
+            color: inherit; 
+            display: flex;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .glass:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.07);
+        }
+
+        .container {
+            width: 100%;
+            max-width: var(--container-width);
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .header-profile {
+            padding: 40px;
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--accent-color);
+        }
+        .profile-info h1 { margin: 0; font-size: 2.5rem; }
+        .profile-info p { color: var(--text-dim); font-size: 1.2rem; margin-top: 8px; }
+
+        .featured-project {
+            position: relative;
+            height: 400px;
+            overflow: hidden;
+            display: flex;
+            align-items: flex-end;
+            padding: 40px;
+            text-decoration: none;
+            color: inherit;
+        }
+        .project-img-bg {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
+            transition: transform 0.5s ease;
+        }
+        .featured-project:hover .project-img-bg { transform: scale(1.05); }
+        .featured-project::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            z-index: -1;
+        }
+
+        .project-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+        .small-card {
+            height: 250px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: flex-start;
+            padding: 30px !important;
+            text-align: left;
+        }
+
+        .card-info {
+            width: 100%;
+            z-index: 2;
+        }
+
+        .card-info h3 {
+            margin: 0 0 8px 0;
+            font-size: 1.4rem;
+            color: var(--text-main);
+        }
+
+        .card-info p {
+            margin: 0;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            color: var(--text-dim);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .small-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(11, 15, 26, 0.8) 0%, transparent 60%);
+            z-index: 1;
+        }
+
+        .contacts {
+            padding: 24px;
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 12px 24px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: var(--text-main);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+        }
+        .btn:hover {
+            background: var(--accent-color);
+            transform: translateY(-2px);
+        }
+
+        .badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 6px 14px;
+            border-radius: 100px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 5;
+        }
+
+        .status-released { 
+            background: rgba(16, 185, 129, 0.2);
+            color: #34d399; 
+            border-color: rgba(52, 211, 153, 0.3);
+        }
+
+        .status-dev { 
+            background: rgba(245, 158, 11, 0.2);
+            color: #fbbf24; 
+            border-color: rgba(251, 191, 36, 0.3);
+        }
+
+        .status-lang { 
+            background: rgba(57, 60, 189, 0.2);
+            color: #3c82f3; 
+            border-color: rgba(128, 181, 245, 0.3);
+            font-size: 1.25rem;
+        }
+
+        .status-idea { 
+            background: rgba(99, 102, 241, 0.2);
+            color: #a5b4fc; 
+            border-color: rgba(165, 180, 252, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .header-profile { flex-direction: column; text-align: center; }
+            .project-grid { grid-template-columns: 1fr; }
+            .container { width: 95%; }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .project-grid .glass:nth-child(1) { transition-delay: 0.1s; }
+        .project-grid .glass:nth-child(2) { transition-delay: 0.2s; }
+        .project-grid .glass:nth-child(3) { transition-delay: 0.3s; }
+        .project-grid .glass:nth-child(4) { transition-delay: 0.4s; }
+    </style>
+</head>
+    <body>
+        <div class="blobs">
+            <div class="blob blob-1"></div>
+            <div class="blob blob-2"></div>
+        </div>
+
+        <div class="container">
+            <header class="glass header-profile reveal">
+                <img src="./images/justarist.jpg" alt="Avatar" class="avatar">
+                <div class="profile-info">
+                    <h1>JustArist</h1>
+                    <p>doing some stuff.</p>
+                </div>
+            </header>
+
+            <a href="https://radarone.online" class="glass featured-project reveal">
+                <div class="project-img-bg" style="background-image: url('./images/radarone_preview.png');"></div>
+                <div class="project-text">
+                    <span class="badge status-released">Released</span>
+                    <span style="color: var(--accent-color); font-weight: bold;">Main Project</span>
+                    <h2 style="margin: 8px 0;">Radar ONE</h2>
+                    <p style="color: var(--text-dim);">Radar ONE — a Telegram bot and interactive real-time threat map. It collects alerts on UAV attacks and other threats from Telegram channels, processes them with an LLM, and delivers updates to subscribers via WebSocket and the bot.</p>
+                </div>
+            </a>
+
+            <div class="project-grid">
+                <a href="https://dynamic-music-card.justarist.cc" class="glass small-card reveal">
+                    <span class="badge status-dev">In Development</span>
+                    <div class="project-img-bg" style="background-image: url('https://dynamic-music-card.justarist.cc/api/album?link=https://music.yandex.ru/album/22492384&cache_bust=1'); opacity: 0.4;"></div>
+                    <div class="card-info">
+                        <h3>Dynamic Music Card</h3>
+                        <p style="color: var(--text-dim);">Dynamic Music Cards for your GitHub READMEs or personal website.</p>
+                    </div>
+                </a>
+                <a href="https://simple-music-player.justarist.cc" class="glass small-card reveal">
+                    <span class="badge status-dev">In Development</span>
+                    <div class="project-img-bg" style="background-image: url('./images/simple-music-player_preview.png'); opacity: 0.4;"></div>
+                    <div class="card-info">  
+                        <h3>Simple Music Player</h3>
+                        <p style="color: var(--text-dim);">Simple Music Player in web with support of Enhanced Lyrics and fetching from LRCLib.</p>
+                    </div>
+                </a>
+            </div>
+
+            <footer class="glass contacts reveal">
+                <a href="https://github.com/justarist" class="btn">GitHub</a>
+                <a href="https://twitter.com/justarist" class="btn">Twitter</a>
+                <a href="mailto://justarist@justarist.cc" class="btn">Email</a>
+                <a href="https://radarone.online/donate" class="btn">Support me!</a>
+                <span class="badge status-lang">🇷🇺</span>
+                <span class="badge status-lang" style="right: 80px;">🇬🇧</span>
+            </footer>
+        </div>
+
+        <script>
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        </script>
+    </body>
+</html>
